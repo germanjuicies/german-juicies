@@ -288,10 +288,10 @@
       <a href="#features">Was dich erwartet</a>
       <a href="#mission">Mission</a>
       <a href="#community">Community</a>
-      <a class="nav-cta" href="https://discord.gg/9BEbDqnFcZ" target="_blank">Discord</a>
+      <a class="nav-cta" href="https://discord.gg/9BEbDqnFcZ" target="_blank" rel="noopener">Discord</a>
     </div>
 
-    <div class="hamburger" id="hamburger">
+    <div class="hamburger" id="hamburger" aria-label="Menü öffnen" role="button" tabindex="0">
       <span></span><span></span><span></span>
     </div>
   </nav>
@@ -301,7 +301,7 @@
   <a href="#features">Was dich erwartet</a>
   <a href="#mission">Mission</a>
   <a href="#community">Community</a>
-  <a href="https://discord.gg/9BEbDqnFcZ" target="_blank">Discord</a>
+  <a href="https://discord.gg/9BEbDqnFcZ" target="_blank" rel="noopener">Discord</a>
 </div>
 
 <section class="hero" id="top">
@@ -312,7 +312,7 @@
       Der erste rein deutschsprachige Juice WRLD Discord-Server —<br>
       Musik, Austausch &amp; 999-Spirit.
     </p>
-    <a class="btn-primary" href="https://discord.gg/9BEbDqnFcZ" target="_blank">
+    <a class="btn-primary" href="https://discord.gg/9BEbDqnFcZ" target="_blank" rel="noopener">
       Join the German Juicies
     </a>
   </div>
@@ -321,13 +321,15 @@
 <section id="features" class="section">
   <h2>Was dich erwartet</h2>
   <ul>
-    <li>🎵 Legacy-Talks & Deep Dives – Songs, Lyrics, Storys & Releases</li>
-    <li>🎧 Musik & Austausch – Empfehlungen, Playlists, neue Artists</li>
-    <li>🧠 Community & Support – Gespräche & gegenseitiger Rückhalt</li>
-    <li>🎮 Gaming & Chill – zocken, labern, abschalten</li>
-    <li>🔥 Aktionen & Community-Projekte – Events & Ideen</li>
+    <li>🎵 Legacy-Talks &amp; Deep Dives – Songs, Lyrics, Storys &amp; Releases</li>
+    <li>🎧 Musik &amp; Austausch – Empfehlungen, Playlists, neue Artists</li>
+    <li>🧠 Community &amp; Support – Gespräche &amp; gegenseitiger Rückhalt</li>
+    <li>🎮 Gaming &amp; Chill – zocken, labern, abschalten</li>
+    <li>🔥 Aktionen &amp; Community-Projekte – Events &amp; Ideen</li>
   </ul>
-  <a class="btn-primary" href="https://discord.gg/9BEbDqnFcZ" target="_blank">Join the German Juicies</a>
+  <a class="btn-primary" href="https://discord.gg/9BEbDqnFcZ" target="_blank" rel="noopener">
+    Join the German Juicies
+  </a>
 </section>
 
 <section id="mission" class="section">
@@ -353,65 +355,23 @@
   const burger = document.getElementById("hamburger");
   const menu = document.getElementById("mobileMenu");
 
-  burger.onclick = () => {
+  function toggleMenu() {
     burger.classList.toggle("active");
     menu.classList.toggle("active");
-  };
+  }
+
+  burger.addEventListener("click", toggleMenu);
+  burger.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") toggleMenu();
+  });
 
   document.querySelectorAll(".mobile-menu a").forEach(link => {
-    link.onclick = () => {
+    link.addEventListener("click", () => {
       burger.classList.remove("active");
       menu.classList.remove("active");
-    };
+    });
   });
 </script>
 
 </body>
-</html>      padding: 15px 40px;
-      background: #ff1a1a;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 6px;
-      transition: 0.2s ease;
-    }
-    .cta:hover {
-      background: #ff3b3b;
-    }
-    footer {
-      position: absolute;
-      bottom: 20px;
-      opacity: 0.4;
-      font-size: 0.8rem;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>GERMAN JUICIES</h1>
-    <p>
-      Deutschlands rein deutschsprachige Juice-WRLD-Community.<br>
-      999 lebt weiter.
-    </p>
-    <a class="cta" href="https://discord.gg/9BEbDqnFcZ" target="_blank">
-      Jetzt Discord beitreten
-    </a>
-    <footer>
-      © German Juicies · 999
-    </footer>
-  </div>
-</body>
 </html>
-<!-- Das kommt oben in deinen HTML-Body, wo du den Link haben willst -->
-<a href="#about">Was ist German Juicies?</a>
-
-<!-- Und das hier ist dein Abschnitt weiter unten -->
-<section id="about" class="section">
-  <h2>Was ist German Juicies?</h2>
-  <p>
-    German Juicies ist eine rein deutschsprachige Discord-Community für alle, die Juice WRLD nicht nur gehört, sondern gefühlt haben.
-  </p>
-  <p>
-    Hier geht es um seine Musik, sein Vermächtnis und den 999-Spirit – gemeinsam, respektvoll und ohne toxischen Müll.
-  </p>
-</section>
