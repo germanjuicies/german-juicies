@@ -675,37 +675,52 @@
   © German Juicies · 999
 </footer>
 
+<!-- Firebase SDKs (Compat, damit GitHub Pages ohne Build funktioniert) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics-compat.js"></script>
+
 <script>
   // =============================
-  // 999 WALL - DEMO STORAGE (localStorage)
+  // FIREBASE INIT
   // =============================
-  // WICHTIG: Das ist nur eine Demo-Lösung für GitHub Pages ohne Backend.
-  // Öffentliche, globale Speicherung geht erst mit Firebase/Supabase o.ä.
+  const firebaseConfig = {
+    apiKey: "AIzaSyCMO8Swb6ofACiGtfDugMGWH8D6lA2fMaI",
+    authDomain: "german-juicies.firebaseapp.com",
+    projectId: "german-juicies",
+    storageBucket: "german-juicies.firebasestorage.app",
+    messagingSenderId: "545322609178",
+    appId: "1:545322609178:web:ffcba0dea5f09112fa3fa3",
+    measurementId: "G-ZJ9HM5JSKS"
+  };
 
-  const STORAGE_KEY = "gj_wall_v1";
+  firebase.initializeApp(firebaseConfig);
+
+  // Analytics kann auf manchen Setups/Browsern blockiert werden – ist egal für die Wall
+  try { firebase.analytics(); } catch (e) {}
+
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+
+  // =============================
+  // 999 WALL - FIRESTORE (öffentlich, global sichtbar)
+  // =============================
+
+  // Stories: collection "wallStories"
+  // Comments: subcollection "comments" unter jedem Story-Doc
+  const STORIES_COL = "wallStories";
+
+  // Owner PIN Hash (SHA-256). Aktuell Platzhalter (leer-string hash).
+  // Wenn du deinen echten PIN willst:
+  // - sag mir deinen gewünschten PIN (oder "mach mir einen"),
+  // - dann geb ich dir den SHA-256, den du hier einträgst.
   const OWNER_PIN_HASH = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
-  // ↑ SHA-256 von leerem String (Platzhalter). Du setzt das später sinnvoll, wenn wir Owner-Mode richtig anbinden.
 
   let ownerMode = false;
 
-  function nowIso() {
-    return new Date().toISOString();
-  }
-
-  function loadData() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return { stories: [] };
-      const parsed = JSON.parse(raw);
-      if (!parsed || !Array.isArray(parsed.stories)) return { stories: [] };
-      return parsed;
-    } catch (e) {
-      return { stories: [] };
-    }
-  }
-
-  function saveData(data) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  function normalizeText(str) {
+    return (str || "").trim();
   }
 
   function escapeHtml(str) {
@@ -713,10 +728,6 @@
       .replaceAll("&", "&amp;")
       .replaceAll("<", "&lt;")
       .replaceAll(">", "&gt;");
-  }
-
-  function normalizeText(str) {
-    return (str || "").trim();
   }
 
   function getDisplayName(signature) {
@@ -730,201 +741,247 @@
     return loc ? `${name} · ${loc}` : `${name}`;
   }
 
-  function render() {
-    const data = loadData();
-    const root = document.getElementById("stories");
-    root.innerHTML = "";
+  function tsToDate(ts) {
+    if (!ts) return null;
+    // Firestore Timestamp (compat) hat toDate()
+    if (typeof ts.toDate === "function") return ts.toDate();
+    // falls doch JS Date
+    if (ts instanceof Date) return ts;
+    return null;
+  }
 
-    // Neueste zuerst bei Stories (kannst du später ändern)
-    const stories = [...data.stories].sort((a,b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
+  function fmtDate(ts) {
+    const d = tsToDate(ts);
+    if (!d) return "";
+    return d.toLocaleString("de-DE");
+  }
 
-    for (const story of stories) {
-      const card = document.createElement("div");
-      card.className = "card";
+  async function sha256Hex(str) {
+    const enc = new TextEncoder().encode(str);
+    const buf = await crypto.subtle.digest("SHA-256", enc);
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
 
-      const head = document.createElement("div");
-      head.className = "card-head";
+  // Comment listeners sauber halten
+  let commentUnsubs = [];
 
-      const left = document.createElement("div");
-      left.textContent = getHeadLine(story.signature, story.location);
-
-      const right = document.createElement("div");
-      right.textContent = story.createdAt ? new Date(story.createdAt).toLocaleString("de-DE") : "";
-
-      head.appendChild(left);
-      head.appendChild(right);
-
-      const h3a = document.createElement("h3");
-      h3a.textContent = "Wie ich Juice WRLD kennengelernt habe";
-      const pa = document.createElement("p");
-      pa.innerHTML = escapeHtml(story.discovered);
-
-      const h3b = document.createElement("h3");
-      h3b.textContent = "Wie er mein Leben auf Dauer beeinflusst hat";
-      const pb = document.createElement("p");
-      pb.innerHTML = escapeHtml(story.impact);
-
-      card.appendChild(head);
-      card.appendChild(h3a);
-      card.appendChild(pa);
-      card.appendChild(h3b);
-      card.appendChild(pb);
-
-      if (normalizeText(story.song)) {
-        const meta = document.createElement("div");
-        meta.className = "meta-line";
-        meta.innerHTML = `🎧 <strong>Song(e):</strong> ${escapeHtml(story.song)}`;
-        card.appendChild(meta);
-      }
-
-      if (normalizeText(story.message)) {
-        const msg = document.createElement("div");
-        msg.className = "msg";
-        msg.innerHTML = escapeHtml(story.message);
-        card.appendChild(msg);
-      }
-
-      const sig = document.createElement("div");
-      sig.className = "signature";
-      sig.textContent = "– " + getDisplayName(story.signature);
-      card.appendChild(sig);
-
-      // Owner Controls (Demo)
-      if (ownerMode) {
-        const ownerBar = document.createElement("div");
-        ownerBar.className = "owner-bar";
-
-        const btnEdit = document.createElement("button");
-        btnEdit.className = "btn-ghost";
-        btnEdit.textContent = "Edit";
-        btnEdit.onclick = () => ownerEditStory(story.id);
-
-        const btnDel = document.createElement("button");
-        btnDel.className = "btn-ghost";
-        btnDel.textContent = "Delete";
-        btnDel.onclick = () => ownerDeleteStory(story.id);
-
-        ownerBar.appendChild(btnEdit);
-        ownerBar.appendChild(btnDel);
-        card.appendChild(ownerBar);
-      }
-
-      const div = document.createElement("div");
-      div.className = "divider";
-      card.appendChild(div);
-
-      // Comments
-      const ct = document.createElement("div");
-      ct.className = "comments-title";
-      ct.textContent = "💭 Antworten aus der Community";
-      card.appendChild(ct);
-
-      const commentsWrap = document.createElement("div");
-
-      // Chronologisch (älteste zuerst)
-      const comments = Array.isArray(story.comments) ? [...story.comments].sort((a,b) => (a.createdAt || "").localeCompare(b.createdAt || "")) : [];
-      for (const c of comments) {
-        const cdiv = document.createElement("div");
-        cdiv.className = "comment";
-
-        const chead = document.createElement("div");
-        chead.className = "comment-head";
-
-        const cleft = document.createElement("div");
-        cleft.textContent = getHeadLine(c.signature, c.location);
-
-        const cright = document.createElement("div");
-        cright.textContent = c.createdAt ? new Date(c.createdAt).toLocaleString("de-DE") : "";
-
-        chead.appendChild(cleft);
-        chead.appendChild(cright);
-
-        const cbody = document.createElement("div");
-        cbody.className = "comment-body";
-        cbody.innerHTML = escapeHtml(c.text);
-
-        cdiv.appendChild(chead);
-        cdiv.appendChild(cbody);
-
-        if (ownerMode) {
-          const ob = document.createElement("div");
-          ob.className = "owner-bar";
-
-          const ed = document.createElement("button");
-          ed.className = "btn-ghost";
-          ed.textContent = "Edit";
-          ed.onclick = () => ownerEditComment(story.id, c.id);
-
-          const del = document.createElement("button");
-          del.className = "btn-ghost";
-          del.textContent = "Delete";
-          del.onclick = () => ownerDeleteComment(story.id, c.id);
-
-          ob.appendChild(ed);
-          ob.appendChild(del);
-          cdiv.appendChild(ob);
-        }
-
-        commentsWrap.appendChild(cdiv);
-      }
-
-      card.appendChild(commentsWrap);
-
-      // Comment form
-      const cf = document.createElement("div");
-      cf.className = "comment-form";
-
-      const ctext = document.createElement("textarea");
-      ctext.placeholder = "Kommentar schreiben… (ohne Diskussion, ohne Bewertung)";
-
-      const cRow = document.createElement("div");
-      cRow.style.display = "flex";
-      cRow.style.gap = "10px";
-      cRow.style.flexWrap = "wrap";
-
-      const csig = document.createElement("input");
-      csig.type = "text";
-      csig.placeholder = "Signatur (optional)";
-
-      const cloc = document.createElement("input");
-      cloc.type = "text";
-      cloc.placeholder = "Ort (optional)";
-
-      cRow.appendChild(csig);
-      cRow.appendChild(cloc);
-
-      const cbtn = document.createElement("button");
-      cbtn.className = "btn-primary";
-      cbtn.textContent = "Kommentar veröffentlichen";
-      cbtn.onclick = () => {
-        const t = normalizeText(ctext.value);
-        if (!t) return;
-
-        const data2 = loadData();
-        const s = data2.stories.find(x => x.id === story.id);
-        if (!s) return;
-
-        if (!Array.isArray(s.comments)) s.comments = [];
-        s.comments.push({
-          id: crypto.randomUUID(),
-          text: t,
-          signature: normalizeText(csig.value),
-          location: normalizeText(cloc.value),
-          createdAt: nowIso()
-        });
-
-        saveData(data2);
-        render();
-      };
-
-      cf.appendChild(ctext);
-      cf.appendChild(cRow);
-      cf.appendChild(cbtn);
-
-      card.appendChild(cf);
-
-      root.appendChild(card);
+  function cleanupCommentListeners() {
+    for (const u of commentUnsubs) {
+      try { u(); } catch (e) {}
     }
+    commentUnsubs = [];
+  }
+
+  function buildStoryCard(story) {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const head = document.createElement("div");
+    head.className = "card-head";
+
+    const left = document.createElement("div");
+    left.textContent = getHeadLine(story.signature, story.location);
+
+    const right = document.createElement("div");
+    right.textContent = fmtDate(story.createdAt);
+
+    head.appendChild(left);
+    head.appendChild(right);
+
+    const h3a = document.createElement("h3");
+    h3a.textContent = "Wie ich Juice WRLD kennengelernt habe";
+    const pa = document.createElement("p");
+    pa.innerHTML = escapeHtml(story.discovered);
+
+    const h3b = document.createElement("h3");
+    h3b.textContent = "Wie er mein Leben auf Dauer beeinflusst hat";
+    const pb = document.createElement("p");
+    pb.innerHTML = escapeHtml(story.impact);
+
+    card.appendChild(head);
+    card.appendChild(h3a);
+    card.appendChild(pa);
+    card.appendChild(h3b);
+    card.appendChild(pb);
+
+    if (normalizeText(story.song)) {
+      const meta = document.createElement("div");
+      meta.className = "meta-line";
+      meta.innerHTML = `🎧 <strong>Song(e):</strong> ${escapeHtml(story.song)}`;
+      card.appendChild(meta);
+    }
+
+    if (normalizeText(story.message)) {
+      const msg = document.createElement("div");
+      msg.className = "msg";
+      msg.innerHTML = escapeHtml(story.message);
+      card.appendChild(msg);
+    }
+
+    const sig = document.createElement("div");
+    sig.className = "signature";
+    sig.textContent = "– " + getDisplayName(story.signature);
+    card.appendChild(sig);
+
+    // Owner Controls
+    if (ownerMode) {
+      const ownerBar = document.createElement("div");
+      ownerBar.className = "owner-bar";
+
+      const btnEdit = document.createElement("button");
+      btnEdit.className = "btn-ghost";
+      btnEdit.textContent = "Edit";
+      btnEdit.onclick = () => ownerEditStory(story);
+
+      const btnDel = document.createElement("button");
+      btnDel.className = "btn-ghost";
+      btnDel.textContent = "Delete";
+      btnDel.onclick = () => ownerDeleteStory(story.id);
+
+      ownerBar.appendChild(btnEdit);
+      ownerBar.appendChild(btnDel);
+      card.appendChild(ownerBar);
+    }
+
+    const div = document.createElement("div");
+    div.className = "divider";
+    card.appendChild(div);
+
+    // Comments Title
+    const ct = document.createElement("div");
+    ct.className = "comments-title";
+    ct.textContent = "💭 Antworten aus der Community";
+    card.appendChild(ct);
+
+    const commentsWrap = document.createElement("div");
+    commentsWrap.id = `comments_${story.id}`;
+    card.appendChild(commentsWrap);
+
+    // Comment form
+    const cf = document.createElement("div");
+    cf.className = "comment-form";
+
+    const ctext = document.createElement("textarea");
+    ctext.placeholder = "Kommentar schreiben… (ohne Diskussion, ohne Bewertung)";
+
+    const cRow = document.createElement("div");
+    cRow.style.display = "flex";
+    cRow.style.gap = "10px";
+    cRow.style.flexWrap = "wrap";
+
+    const csig = document.createElement("input");
+    csig.type = "text";
+    csig.placeholder = "Signatur (optional)";
+
+    const cloc = document.createElement("input");
+    cloc.type = "text";
+    cloc.placeholder = "Ort (optional)";
+
+    cRow.appendChild(csig);
+    cRow.appendChild(cloc);
+
+    const cbtn = document.createElement("button");
+    cbtn.className = "btn-primary";
+    cbtn.textContent = "Kommentar veröffentlichen";
+    cbtn.onclick = async () => {
+      const t = normalizeText(ctext.value);
+      if (!t) return;
+
+      cbtn.disabled = true;
+      try {
+        await db.collection(STORIES_COL)
+          .doc(story.id)
+          .collection("comments")
+          .add({
+            text: t,
+            signature: normalizeText(csig.value),
+            location: normalizeText(cloc.value),
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+
+        ctext.value = "";
+        csig.value = "";
+        cloc.value = "";
+      } catch (e) {
+        alert("Kommentar konnte nicht gespeichert werden. (Check Firestore Rules / Console)");
+      } finally {
+        cbtn.disabled = false;
+      }
+    };
+
+    cf.appendChild(ctext);
+    cf.appendChild(cRow);
+    cf.appendChild(cbtn);
+
+    card.appendChild(cf);
+
+    // Realtime comments listener (chronologisch: älteste zuerst)
+    const unsub = db.collection(STORIES_COL)
+      .doc(story.id)
+      .collection("comments")
+      .orderBy("createdAt", "asc")
+      .onSnapshot((snap) => {
+        const target = document.getElementById(`comments_${story.id}`);
+        if (!target) return;
+
+        target.innerHTML = "";
+
+        snap.forEach((doc) => {
+          const c = doc.data();
+          const cdiv = document.createElement("div");
+          cdiv.className = "comment";
+
+          const chead = document.createElement("div");
+          chead.className = "comment-head";
+
+          const cleft = document.createElement("div");
+          cleft.textContent = getHeadLine(c.signature, c.location);
+
+          const cright = document.createElement("div");
+          cright.textContent = fmtDate(c.createdAt);
+
+          chead.appendChild(cleft);
+          chead.appendChild(cright);
+
+          const cbody = document.createElement("div");
+          cbody.className = "comment-body";
+          cbody.innerHTML = escapeHtml(c.text);
+
+          cdiv.appendChild(chead);
+          cdiv.appendChild(cbody);
+
+          if (ownerMode) {
+            const ob = document.createElement("div");
+            ob.className = "owner-bar";
+
+            const ed = document.createElement("button");
+            ed.className = "btn-ghost";
+            ed.textContent = "Edit";
+            ed.onclick = () => ownerEditComment(story.id, doc.id, c);
+
+            const del = document.createElement("button");
+            del.className = "btn-ghost";
+            del.textContent = "Delete";
+            del.onclick = () => ownerDeleteComment(story.id, doc.id);
+
+            ob.appendChild(ed);
+            ob.appendChild(del);
+            cdiv.appendChild(ob);
+          }
+
+          target.appendChild(cdiv);
+        });
+      }, (err) => {
+        // Falls Rules blocken -> sichtbar machen
+        const target = document.getElementById(`comments_${story.id}`);
+        if (target) {
+          target.innerHTML = `<div class="subtle" style="text-align:left;">Kommentare konnten nicht geladen werden. (Firestore Rules / Console)</div>`;
+        }
+      });
+
+    commentUnsubs.push(unsub);
+
+    return card;
   }
 
   function clearForm() {
@@ -936,7 +993,7 @@
     document.getElementById("f_location").value = "";
   }
 
-  document.getElementById("submitStory").addEventListener("click", () => {
+  document.getElementById("submitStory").addEventListener("click", async () => {
     const discovered = normalizeText(document.getElementById("f_discovered").value);
     const impact = normalizeText(document.getElementById("f_impact").value);
     const song = normalizeText(document.getElementById("f_song").value);
@@ -952,38 +1009,41 @@
       return;
     }
 
-    const data = loadData();
-    data.stories.push({
-      id: crypto.randomUUID(),
-      discovered,
-      impact,
-      song,
-      message,
-      signature,
-      location,
-      createdAt: nowIso(),
-      comments: []
-    });
+    const btn = document.getElementById("submitStory");
+    btn.disabled = true;
 
-    saveData(data);
-    clearForm();
-    status.textContent = "Veröffentlicht.";
-    render();
+    try {
+      await db.collection(STORIES_COL).add({
+        discovered,
+        impact,
+        song,
+        message,
+        signature,
+        location,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      clearForm();
+      status.textContent = "Veröffentlicht.";
+    } catch (e) {
+      status.textContent = "Konnte nicht speichern. (Check Firestore Rules / Console)";
+    } finally {
+      btn.disabled = false;
+    }
   });
 
-  async function sha256Hex(str) {
-    const enc = new TextEncoder().encode(str);
-    const buf = await crypto.subtle.digest("SHA-256", enc);
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
-  }
-
+  // =============================
+  // OWNER MODE (PIN)
+  // =============================
   document.getElementById("ownerToggle").addEventListener("click", async () => {
     const ownerStatus = document.getElementById("ownerStatus");
 
     if (ownerMode) {
       ownerMode = false;
       ownerStatus.textContent = "Owner-Mode aus.";
-      render();
+      // Re-render owner buttons sichtbar/unsichtbar
+      // -> Stories listener triggert ohnehin; wir rendern sofort neu:
+      forceRerender();
       return;
     }
 
@@ -994,102 +1054,138 @@
     if (hash === OWNER_PIN_HASH) {
       ownerMode = true;
       ownerStatus.textContent = "Owner-Mode an.";
-      render();
+      forceRerender();
     } else {
       ownerStatus.textContent = "Falsche PIN.";
     }
   });
 
-  function ownerDeleteStory(storyId) {
+  async function ownerDeleteStory(storyId) {
     if (!ownerMode) return;
     const ok = confirm("Story wirklich löschen?");
     if (!ok) return;
 
-    const data = loadData();
-    data.stories = data.stories.filter(s => s.id !== storyId);
-    saveData(data);
-    render();
+    try {
+      // Kommentare vorher löschen (Firestore löscht Subcollections nicht automatisch)
+      const commentsSnap = await db.collection(STORIES_COL).doc(storyId).collection("comments").get();
+      const batch = db.batch();
+      commentsSnap.forEach((d) => batch.delete(d.ref));
+      batch.delete(db.collection(STORIES_COL).doc(storyId));
+      await batch.commit();
+    } catch (e) {
+      alert("Löschen fehlgeschlagen. (Rules?)");
+    }
   }
 
-  function ownerEditStory(storyId) {
+  async function ownerEditStory(story) {
     if (!ownerMode) return;
 
-    const data = loadData();
-    const s = data.stories.find(x => x.id === storyId);
-    if (!s) return;
-
-    const newDiscovered = prompt("Edit: Wie kennengelernt?", s.discovered);
+    const newDiscovered = prompt("Edit: Wie kennengelernt?", story.discovered || "");
     if (newDiscovered === null) return;
 
-    const newImpact = prompt("Edit: Einfluss?", s.impact);
+    const newImpact = prompt("Edit: Einfluss?", story.impact || "");
     if (newImpact === null) return;
 
-    const newSong = prompt("Edit: Song(e) (optional)", s.song || "");
+    const newSong = prompt("Edit: Song(e) (optional)", story.song || "");
     if (newSong === null) return;
 
-    const newMessage = prompt("Edit: Message (optional)", s.message || "");
+    const newMessage = prompt("Edit: Message (optional)", story.message || "");
     if (newMessage === null) return;
 
-    const newSig = prompt("Edit: Signatur (optional)", s.signature || "");
+    const newSig = prompt("Edit: Signatur (optional)", story.signature || "");
     if (newSig === null) return;
 
-    const newLoc = prompt("Edit: Ort (optional)", s.location || "");
+    const newLoc = prompt("Edit: Ort (optional)", story.location || "");
     if (newLoc === null) return;
 
-    s.discovered = normalizeText(newDiscovered);
-    s.impact = normalizeText(newImpact);
-    s.song = normalizeText(newSong);
-    s.message = normalizeText(newMessage);
-    s.signature = normalizeText(newSig);
-    s.location = normalizeText(newLoc);
-
-    saveData(data);
-    render();
+    try {
+      await db.collection(STORIES_COL).doc(story.id).update({
+        discovered: normalizeText(newDiscovered),
+        impact: normalizeText(newImpact),
+        song: normalizeText(newSong),
+        message: normalizeText(newMessage),
+        signature: normalizeText(newSig),
+        location: normalizeText(newLoc)
+      });
+    } catch (e) {
+      alert("Bearbeiten fehlgeschlagen. (Rules?)");
+    }
   }
 
-  function ownerDeleteComment(storyId, commentId) {
+  async function ownerDeleteComment(storyId, commentId) {
     if (!ownerMode) return;
     const ok = confirm("Kommentar wirklich löschen?");
     if (!ok) return;
 
-    const data = loadData();
-    const s = data.stories.find(x => x.id === storyId);
-    if (!s || !Array.isArray(s.comments)) return;
-
-    s.comments = s.comments.filter(c => c.id !== commentId);
-    saveData(data);
-    render();
+    try {
+      await db.collection(STORIES_COL).doc(storyId).collection("comments").doc(commentId).delete();
+    } catch (e) {
+      alert("Kommentar löschen fehlgeschlagen. (Rules?)");
+    }
   }
 
-  function ownerEditComment(storyId, commentId) {
+  async function ownerEditComment(storyId, commentId, cData) {
     if (!ownerMode) return;
 
-    const data = loadData();
-    const s = data.stories.find(x => x.id === storyId);
-    if (!s || !Array.isArray(s.comments)) return;
-
-    const c = s.comments.find(x => x.id === commentId);
-    if (!c) return;
-
-    const newText = prompt("Edit: Kommentar", c.text);
+    const newText = prompt("Edit: Kommentar", cData.text || "");
     if (newText === null) return;
 
-    const newSig = prompt("Edit: Signatur (optional)", c.signature || "");
+    const newSig = prompt("Edit: Signatur (optional)", cData.signature || "");
     if (newSig === null) return;
 
-    const newLoc = prompt("Edit: Ort (optional)", c.location || "");
+    const newLoc = prompt("Edit: Ort (optional)", cData.location || "");
     if (newLoc === null) return;
 
-    c.text = normalizeText(newText);
-    c.signature = normalizeText(newSig);
-    c.location = normalizeText(newLoc);
-
-    saveData(data);
-    render();
+    try {
+      await db.collection(STORIES_COL).doc(storyId).collection("comments").doc(commentId).update({
+        text: normalizeText(newText),
+        signature: normalizeText(newSig),
+        location: normalizeText(newLoc)
+      });
+    } catch (e) {
+      alert("Kommentar bearbeiten fehlgeschlagen. (Rules?)");
+    }
   }
 
   // =============================
-  // MOBILE MENU
+  // STORIES REALTIME LISTENER
+  // =============================
+  let latestStoriesCache = [];
+
+  function renderStories(stories) {
+    const root = document.getElementById("stories");
+    root.innerHTML = "";
+
+    cleanupCommentListeners();
+
+    for (const s of stories) {
+      root.appendChild(buildStoryCard(s));
+    }
+  }
+
+  function forceRerender() {
+    renderStories(latestStoriesCache);
+  }
+
+  db.collection(STORIES_COL)
+    .orderBy("createdAt", "desc") // Neueste zuerst (wie besprochen)
+    .onSnapshot((snap) => {
+      const stories = [];
+      snap.forEach((doc) => {
+        stories.push({ id: doc.id, ...doc.data() });
+      });
+
+      latestStoriesCache = stories;
+      renderStories(stories);
+    }, (err) => {
+      const root = document.getElementById("stories");
+      if (root) {
+        root.innerHTML = `<div class="subtle" style="text-align:left;">Stories konnten nicht geladen werden. (Firestore Rules / Console)</div>`;
+      }
+    });
+
+  // =============================
+  // MOBILE MENU (unverändert)
   // =============================
   const burger = document.getElementById("hamburger");
   const menu = document.getElementById("mobileMenu");
@@ -1110,9 +1206,6 @@
       menu.classList.remove("active");
     });
   });
-
-  // initial render
-  render();
 </script>
   
 </body>
