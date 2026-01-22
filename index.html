@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>German Juicies – Deutscher Juice WRLD Discord</title>
-  <meta name="description" content="German Juicies – der erste rein deutschsprachige Juice WRLD Discord Server. Musik, Austausch & 999-Spirit.">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="German Juicies – der erste rein deutschsprachige Juice WRLD Discord Server. Musik, Austausch & 999-Spirit." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
     html { scroll-behavior: smooth; }
@@ -177,6 +177,8 @@
       border-radius: 14px;
       text-decoration: none;
       font-weight: 800;
+      border: 0;
+      cursor: pointer;
     }
 
     .btn-primary:hover {
@@ -269,6 +271,230 @@
       font-size: .85rem;
     }
 
+    /* ================= MANIFEST SEAL ================= */
+
+    .manifest-seal {
+      margin-top: 46px;
+      display: inline-block;
+      padding: 14px 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 14px;
+      letter-spacing: 3px;
+      font-weight: 900;
+      opacity: .95;
+      text-transform: uppercase;
+    }
+
+    /* ================= WALL ================= */
+
+    .wall-wrap {
+      text-align: left;
+      margin-top: 26px;
+    }
+
+    .wall-note {
+      opacity: .75;
+      line-height: 1.7;
+      margin: 18px 0 28px;
+      text-align: left;
+    }
+
+    .wall-form {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 18px;
+      padding: 18px;
+      text-align: left;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .label {
+      font-weight: 700;
+      opacity: .9;
+    }
+
+    .hint {
+      font-size: .9rem;
+      opacity: .65;
+      line-height: 1.5;
+      margin-top: -4px;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      box-sizing: border-box;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+      color: white;
+      border-radius: 14px;
+      padding: 12px 12px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      border-color: rgba(255,255,255,.24);
+    }
+
+    .wall-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .subtle {
+      opacity: .7;
+      font-size: .9rem;
+      line-height: 1.5;
+    }
+
+    .cards {
+      margin-top: 30px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      border-radius: 18px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.07);
+      padding: 18px;
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      opacity: .8;
+      font-size: .95rem;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      margin: 18px 0 8px;
+      font-size: 1.15rem;
+      letter-spacing: 1px;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 900;
+      opacity: .95;
+      text-transform: none;
+    }
+
+    .card p {
+      margin: 0 0 10px;
+      opacity: .86;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .meta-line {
+      margin-top: 8px;
+      opacity: .8;
+      font-size: .95rem;
+    }
+
+    .msg {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+      opacity: .92;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .signature {
+      margin-top: 12px;
+      opacity: .75;
+      font-weight: 700;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,.08);
+      margin: 18px 0;
+    }
+
+    .comments-title {
+      font-weight: 900;
+      opacity: .92;
+      margin: 0 0 10px;
+      letter-spacing: 1px;
+      text-align: left;
+    }
+
+    .comment {
+      border-radius: 14px;
+      padding: 12px 12px;
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.02);
+      margin-bottom: 10px;
+    }
+
+    .comment-head {
+      opacity: .75;
+      font-size: .92rem;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .comment-body {
+      opacity: .86;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .comment-form {
+      margin-top: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .owner-bar {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .btn-ghost {
+      display: inline-block;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: transparent;
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(255,255,255,.22);
+    }
+
     /* ================= RESPONSIVE ================= */
 
     @media (max-width: 820px) {
@@ -286,8 +512,10 @@
 
     <div class="navlinks">
       <a href="#features">Was dich erwartet</a>
-      <a href="#mission">Mission</a>
-      <a href="#community">Community</a>
+      <a href="#manifest">Manifest</a>
+      <a href="#values">Werte</a>
+      <a href="#against">Haltung</a>
+      <a href="#wall">999 Wall</a>
       <a class="nav-cta" href="https://discord.gg/9BEbDqnFcZ" target="_blank" rel="noopener">Discord</a>
     </div>
 
@@ -299,8 +527,10 @@
 
 <div class="mobile-menu" id="mobileMenu">
   <a href="#features">Was dich erwartet</a>
-  <a href="#mission">Mission</a>
-  <a href="#community">Community</a>
+  <a href="#manifest">Manifest</a>
+  <a href="#values">Werte</a>
+  <a href="#against">Haltung</a>
+  <a href="#wall">999 Wall</a>
   <a href="https://discord.gg/9BEbDqnFcZ" target="_blank" rel="noopener">Discord</a>
 </div>
 
@@ -309,7 +539,7 @@
   <div class="hero-inner">
     <h1>GERMAN JUICIES</h1>
     <p>
-      Der erste rein deutschsprachige Juice WRLD Discord-Server —<br>
+      Der erste rein deutschsprachige Juice WRLD Discord-Server —<br />
       Musik, Austausch &amp; 999-Spirit.
     </p>
     <a class="btn-primary" href="https://discord.gg/9BEbDqnFcZ" target="_blank" rel="noopener">
@@ -332,18 +562,112 @@
   </a>
 </section>
 
-<section id="mission" class="section">
-  <h2>Mission</h2>
-  <p><strong>999 bedeutet nicht, dass alles leicht ist.</strong></p>
-  <p>Es bedeutet, aus etwas Dunklem etwas Starkes zu machen.</p>
-  <p>Diese Community existiert, um genau diesen Spirit weiterzutragen — ehrlich, verbunden und gemeinsam.</p>
+<section id="manifest" class="section">
+  <h2>THE 999 MANIFEST</h2>
+
+  <p>
+    Wir sind Menschen, die sich in der Musik wiedergefunden haben.<br />
+    Dabei war Juice Wrld kein Trend – er war ein Spiegel
+  </p>
+
+  <p>
+    Mit Allem, was wir tun, fördern wir den 999-Spirit.<br />
+    999 bedeutet nicht, glücklich zu sein – es bedeutet, aus jeder beschissenen Situation das Beste zu machen.
+  </p>
+
+  <div class="manifest-seal">TURN THE EVIL UPSIDE DOWN</div>
+</section>
+
+<section id="values" class="section">
+  <h2>Wofür stehen wir?</h2>
+  <ul>
+    <li>🖤 Ehrlichkeit statt Poser-Image</li>
+    <li>🎧 Musik als Spache</li>
+    <li>🫱🏿‍🫲🏻 Respekt vor jedem Struggle</li>
+    <li>🚫 Kein Gatekeeping</li>
+  </ul>
+</section>
+
+<section id="against" class="section">
+  <h2>Wogegen wir stehen</h2>
+  <p>
+    Wir stehen gegen das stille Verschwinden dieser Community im deutschsprachigen Raum.<br />
+    Gegen den Moment, in dem Juice nur noch ein „war mal“-Name ist.
+  </p>
+  <p>
+    Mit jedem Post, jeder Aktion, jeder neuen Person, die sich traut zu bleiben,<br />
+    halten wir das Vermächtnis <strong>lebendig</strong> — hier, auf Deutsch, gemeinsam.
+  </p>
 </section>
 
 <section id="community" class="section">
   <h2>Community</h2>
   <p>
-    Von Fans für Fans. Rein deutschsprachig.<br>
+    Von Fans für Fans. Rein deutschsprachig.<br />
     Für alle, die die Musik fühlen und Teil davon sein wollen.
+  </p>
+</section>
+
+<section id="wall" class="section">
+  <h2>THE 999 WALL</h2>
+
+  <p class="wall-note">
+    Teile deine Story. Ohne Account. Ohne Filter.<br />
+    Beiträge erscheinen sofort öffentlich.<br />
+    Inhalte können vom Betreiber jederzeit bearbeitet oder entfernt werden.
+  </p>
+
+  <div class="wall-form" id="wallForm">
+    <div class="field">
+      <div class="label">1) Wie hast du Juice WRLD kennengelernt? <span style="opacity:.7;">(Pflicht)</span></div>
+      <div class="hint">Schreib’s so lang, wie’s sein muss.</div>
+      <textarea id="f_discovered" placeholder="..."></textarea>
+    </div>
+
+    <div class="field">
+      <div class="label">2) Wie hat er dein Leben auf Dauer beeinflusst? <span style="opacity:.7;">(Pflicht)</span></div>
+      <div class="hint">Kein Limit. Keine Vorgaben.</div>
+      <textarea id="f_impact" placeholder="..."></textarea>
+    </div>
+
+    <div class="field">
+      <div class="label">3) Ein Song, der für dich alles bedeutet? <span style="opacity:.7;">(Optional)</span></div>
+      <input id="f_song" type="text" placeholder="z.B. Legends / Empty / Wishing Well ..." />
+    </div>
+
+    <div class="field">
+      <div class="label">4) Deine Message an die Community? <span style="opacity:.7;">(Optional)</span></div>
+      <textarea id="f_message" placeholder="..."></textarea>
+    </div>
+
+    <div class="field">
+      <div class="label">5) Signatur (Name, Nick, Social Media, etc.) <span style="opacity:.7;">(Optional)</span></div>
+      <input id="f_signature" type="text" placeholder="z.B. Anonym / Alex / @deininsta" />
+    </div>
+
+    <div class="field">
+      <div class="label">6) Ort <span style="opacity:.7;">(Optional)</span></div>
+      <input id="f_location" type="text" placeholder="z.B. Berlin / NRW / Österreich" />
+    </div>
+
+    <div class="wall-actions">
+      <button class="btn-primary" id="submitStory">Story veröffentlichen</button>
+      <span class="subtle" id="statusText"></span>
+    </div>
+
+    <div class="owner-bar">
+      <button class="btn-ghost" id="ownerToggle">Owner-Mode</button>
+      <span class="subtle" id="ownerStatus"></span>
+    </div>
+  </div>
+
+  <div class="wall-wrap">
+    <div class="cards" id="stories"></div>
+  </div>
+
+  <p class="subtle" style="margin-top:18px; text-align:left;">
+    Hinweis: Diese GitHub-Version speichert Stories/Kommentare aktuell nur im Browser (Demo-Modus).<br />
+    Wenn du willst, mache ich dir als nächsten Schritt die echte „öffentlich für alle“-Version mit Datenbank-Anbindung.
   </p>
 </section>
 
@@ -352,6 +676,421 @@
 </footer>
 
 <script>
+  // =============================
+  // 999 WALL - DEMO STORAGE (localStorage)
+  // =============================
+  // WICHTIG: Das ist nur eine Demo-Lösung für GitHub Pages ohne Backend.
+  // Öffentliche, globale Speicherung geht erst mit Firebase/Supabase o.ä.
+
+  const STORAGE_KEY = "gj_wall_v1";
+  const OWNER_PIN_HASH = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+  // ↑ SHA-256 von leerem String (Platzhalter). Du setzt das später sinnvoll, wenn wir Owner-Mode richtig anbinden.
+
+  let ownerMode = false;
+
+  function nowIso() {
+    return new Date().toISOString();
+  }
+
+  function loadData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { stories: [] };
+      const parsed = JSON.parse(raw);
+      if (!parsed || !Array.isArray(parsed.stories)) return { stories: [] };
+      return parsed;
+    } catch (e) {
+      return { stories: [] };
+    }
+  }
+
+  function saveData(data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function escapeHtml(str) {
+    return (str || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
+  }
+
+  function normalizeText(str) {
+    return (str || "").trim();
+  }
+
+  function getDisplayName(signature) {
+    const s = normalizeText(signature);
+    return s ? s : "Anonym";
+  }
+
+  function getHeadLine(signature, location) {
+    const name = getDisplayName(signature);
+    const loc = normalizeText(location);
+    return loc ? `${name} · ${loc}` : `${name}`;
+  }
+
+  function render() {
+    const data = loadData();
+    const root = document.getElementById("stories");
+    root.innerHTML = "";
+
+    // Neueste zuerst bei Stories (kannst du später ändern)
+    const stories = [...data.stories].sort((a,b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
+
+    for (const story of stories) {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const head = document.createElement("div");
+      head.className = "card-head";
+
+      const left = document.createElement("div");
+      left.textContent = getHeadLine(story.signature, story.location);
+
+      const right = document.createElement("div");
+      right.textContent = story.createdAt ? new Date(story.createdAt).toLocaleString("de-DE") : "";
+
+      head.appendChild(left);
+      head.appendChild(right);
+
+      const h3a = document.createElement("h3");
+      h3a.textContent = "Wie ich Juice WRLD kennengelernt habe";
+      const pa = document.createElement("p");
+      pa.innerHTML = escapeHtml(story.discovered);
+
+      const h3b = document.createElement("h3");
+      h3b.textContent = "Wie er mein Leben auf Dauer beeinflusst hat";
+      const pb = document.createElement("p");
+      pb.innerHTML = escapeHtml(story.impact);
+
+      card.appendChild(head);
+      card.appendChild(h3a);
+      card.appendChild(pa);
+      card.appendChild(h3b);
+      card.appendChild(pb);
+
+      if (normalizeText(story.song)) {
+        const meta = document.createElement("div");
+        meta.className = "meta-line";
+        meta.innerHTML = `🎧 <strong>Song(e):</strong> ${escapeHtml(story.song)}`;
+        card.appendChild(meta);
+      }
+
+      if (normalizeText(story.message)) {
+        const msg = document.createElement("div");
+        msg.className = "msg";
+        msg.innerHTML = escapeHtml(story.message);
+        card.appendChild(msg);
+      }
+
+      const sig = document.createElement("div");
+      sig.className = "signature";
+      sig.textContent = "– " + getDisplayName(story.signature);
+      card.appendChild(sig);
+
+      // Owner Controls (Demo)
+      if (ownerMode) {
+        const ownerBar = document.createElement("div");
+        ownerBar.className = "owner-bar";
+
+        const btnEdit = document.createElement("button");
+        btnEdit.className = "btn-ghost";
+        btnEdit.textContent = "Edit";
+        btnEdit.onclick = () => ownerEditStory(story.id);
+
+        const btnDel = document.createElement("button");
+        btnDel.className = "btn-ghost";
+        btnDel.textContent = "Delete";
+        btnDel.onclick = () => ownerDeleteStory(story.id);
+
+        ownerBar.appendChild(btnEdit);
+        ownerBar.appendChild(btnDel);
+        card.appendChild(ownerBar);
+      }
+
+      const div = document.createElement("div");
+      div.className = "divider";
+      card.appendChild(div);
+
+      // Comments
+      const ct = document.createElement("div");
+      ct.className = "comments-title";
+      ct.textContent = "💭 Antworten aus der Community";
+      card.appendChild(ct);
+
+      const commentsWrap = document.createElement("div");
+
+      // Chronologisch (älteste zuerst)
+      const comments = Array.isArray(story.comments) ? [...story.comments].sort((a,b) => (a.createdAt || "").localeCompare(b.createdAt || "")) : [];
+      for (const c of comments) {
+        const cdiv = document.createElement("div");
+        cdiv.className = "comment";
+
+        const chead = document.createElement("div");
+        chead.className = "comment-head";
+
+        const cleft = document.createElement("div");
+        cleft.textContent = getHeadLine(c.signature, c.location);
+
+        const cright = document.createElement("div");
+        cright.textContent = c.createdAt ? new Date(c.createdAt).toLocaleString("de-DE") : "";
+
+        chead.appendChild(cleft);
+        chead.appendChild(cright);
+
+        const cbody = document.createElement("div");
+        cbody.className = "comment-body";
+        cbody.innerHTML = escapeHtml(c.text);
+
+        cdiv.appendChild(chead);
+        cdiv.appendChild(cbody);
+
+        if (ownerMode) {
+          const ob = document.createElement("div");
+          ob.className = "owner-bar";
+
+          const ed = document.createElement("button");
+          ed.className = "btn-ghost";
+          ed.textContent = "Edit";
+          ed.onclick = () => ownerEditComment(story.id, c.id);
+
+          const del = document.createElement("button");
+          del.className = "btn-ghost";
+          del.textContent = "Delete";
+          del.onclick = () => ownerDeleteComment(story.id, c.id);
+
+          ob.appendChild(ed);
+          ob.appendChild(del);
+          cdiv.appendChild(ob);
+        }
+
+        commentsWrap.appendChild(cdiv);
+      }
+
+      card.appendChild(commentsWrap);
+
+      // Comment form
+      const cf = document.createElement("div");
+      cf.className = "comment-form";
+
+      const ctext = document.createElement("textarea");
+      ctext.placeholder = "Kommentar schreiben… (ohne Diskussion, ohne Bewertung)";
+
+      const cRow = document.createElement("div");
+      cRow.style.display = "flex";
+      cRow.style.gap = "10px";
+      cRow.style.flexWrap = "wrap";
+
+      const csig = document.createElement("input");
+      csig.type = "text";
+      csig.placeholder = "Signatur (optional)";
+
+      const cloc = document.createElement("input");
+      cloc.type = "text";
+      cloc.placeholder = "Ort (optional)";
+
+      cRow.appendChild(csig);
+      cRow.appendChild(cloc);
+
+      const cbtn = document.createElement("button");
+      cbtn.className = "btn-primary";
+      cbtn.textContent = "Kommentar veröffentlichen";
+      cbtn.onclick = () => {
+        const t = normalizeText(ctext.value);
+        if (!t) return;
+
+        const data2 = loadData();
+        const s = data2.stories.find(x => x.id === story.id);
+        if (!s) return;
+
+        if (!Array.isArray(s.comments)) s.comments = [];
+        s.comments.push({
+          id: crypto.randomUUID(),
+          text: t,
+          signature: normalizeText(csig.value),
+          location: normalizeText(cloc.value),
+          createdAt: nowIso()
+        });
+
+        saveData(data2);
+        render();
+      };
+
+      cf.appendChild(ctext);
+      cf.appendChild(cRow);
+      cf.appendChild(cbtn);
+
+      card.appendChild(cf);
+
+      root.appendChild(card);
+    }
+  }
+
+  function clearForm() {
+    document.getElementById("f_discovered").value = "";
+    document.getElementById("f_impact").value = "";
+    document.getElementById("f_song").value = "";
+    document.getElementById("f_message").value = "";
+    document.getElementById("f_signature").value = "";
+    document.getElementById("f_location").value = "";
+  }
+
+  document.getElementById("submitStory").addEventListener("click", () => {
+    const discovered = normalizeText(document.getElementById("f_discovered").value);
+    const impact = normalizeText(document.getElementById("f_impact").value);
+    const song = normalizeText(document.getElementById("f_song").value);
+    const message = normalizeText(document.getElementById("f_message").value);
+    const signature = normalizeText(document.getElementById("f_signature").value);
+    const location = normalizeText(document.getElementById("f_location").value);
+
+    const status = document.getElementById("statusText");
+    status.textContent = "";
+
+    if (!discovered || !impact) {
+      status.textContent = "Bitte fülle die beiden Pflichtfelder aus.";
+      return;
+    }
+
+    const data = loadData();
+    data.stories.push({
+      id: crypto.randomUUID(),
+      discovered,
+      impact,
+      song,
+      message,
+      signature,
+      location,
+      createdAt: nowIso(),
+      comments: []
+    });
+
+    saveData(data);
+    clearForm();
+    status.textContent = "Veröffentlicht.";
+    render();
+  });
+
+  async function sha256Hex(str) {
+    const enc = new TextEncoder().encode(str);
+    const buf = await crypto.subtle.digest("SHA-256", enc);
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  document.getElementById("ownerToggle").addEventListener("click", async () => {
+    const ownerStatus = document.getElementById("ownerStatus");
+
+    if (ownerMode) {
+      ownerMode = false;
+      ownerStatus.textContent = "Owner-Mode aus.";
+      render();
+      return;
+    }
+
+    const pin = prompt("Owner-PIN:");
+    if (pin === null) return;
+
+    const hash = await sha256Hex(pin);
+    if (hash === OWNER_PIN_HASH) {
+      ownerMode = true;
+      ownerStatus.textContent = "Owner-Mode an.";
+      render();
+    } else {
+      ownerStatus.textContent = "Falsche PIN.";
+    }
+  });
+
+  function ownerDeleteStory(storyId) {
+    if (!ownerMode) return;
+    const ok = confirm("Story wirklich löschen?");
+    if (!ok) return;
+
+    const data = loadData();
+    data.stories = data.stories.filter(s => s.id !== storyId);
+    saveData(data);
+    render();
+  }
+
+  function ownerEditStory(storyId) {
+    if (!ownerMode) return;
+
+    const data = loadData();
+    const s = data.stories.find(x => x.id === storyId);
+    if (!s) return;
+
+    const newDiscovered = prompt("Edit: Wie kennengelernt?", s.discovered);
+    if (newDiscovered === null) return;
+
+    const newImpact = prompt("Edit: Einfluss?", s.impact);
+    if (newImpact === null) return;
+
+    const newSong = prompt("Edit: Song(e) (optional)", s.song || "");
+    if (newSong === null) return;
+
+    const newMessage = prompt("Edit: Message (optional)", s.message || "");
+    if (newMessage === null) return;
+
+    const newSig = prompt("Edit: Signatur (optional)", s.signature || "");
+    if (newSig === null) return;
+
+    const newLoc = prompt("Edit: Ort (optional)", s.location || "");
+    if (newLoc === null) return;
+
+    s.discovered = normalizeText(newDiscovered);
+    s.impact = normalizeText(newImpact);
+    s.song = normalizeText(newSong);
+    s.message = normalizeText(newMessage);
+    s.signature = normalizeText(newSig);
+    s.location = normalizeText(newLoc);
+
+    saveData(data);
+    render();
+  }
+
+  function ownerDeleteComment(storyId, commentId) {
+    if (!ownerMode) return;
+    const ok = confirm("Kommentar wirklich löschen?");
+    if (!ok) return;
+
+    const data = loadData();
+    const s = data.stories.find(x => x.id === storyId);
+    if (!s || !Array.isArray(s.comments)) return;
+
+    s.comments = s.comments.filter(c => c.id !== commentId);
+    saveData(data);
+    render();
+  }
+
+  function ownerEditComment(storyId, commentId) {
+    if (!ownerMode) return;
+
+    const data = loadData();
+    const s = data.stories.find(x => x.id === storyId);
+    if (!s || !Array.isArray(s.comments)) return;
+
+    const c = s.comments.find(x => x.id === commentId);
+    if (!c) return;
+
+    const newText = prompt("Edit: Kommentar", c.text);
+    if (newText === null) return;
+
+    const newSig = prompt("Edit: Signatur (optional)", c.signature || "");
+    if (newSig === null) return;
+
+    const newLoc = prompt("Edit: Ort (optional)", c.location || "");
+    if (newLoc === null) return;
+
+    c.text = normalizeText(newText);
+    c.signature = normalizeText(newSig);
+    c.location = normalizeText(newLoc);
+
+    saveData(data);
+    render();
+  }
+
+  // =============================
+  // MOBILE MENU
+  // =============================
   const burger = document.getElementById("hamburger");
   const menu = document.getElementById("mobileMenu");
 
@@ -371,6 +1110,9 @@
       menu.classList.remove("active");
     });
   });
+
+  // initial render
+  render();
 </script>
 
 </body>
